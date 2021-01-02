@@ -17,7 +17,7 @@ cd i3blocks-config
 mkdir -p ~/.config/i3blocks
 cp i3blocks ~/.config/i3blocks/config
 mkdir -p ~/.local/bin
-cp statusbar ~/.local/bin/
+cp -r statusbar ~/.local/bin/
 ```
 
 ## Music metadata
