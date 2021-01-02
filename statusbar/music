@@ -1,0 +1,42 @@
+#!/bin/bash
+
+MUSICSTATUS=$(playerctl status)
+case $MUSICSTATUS in
+
+  Playing)
+    echo -n "▶ "
+    #echo -n "▶️ "
+    ;;
+
+  Paused)
+    echo -n "⏸ "
+    ;;
+
+  #*)
+  #  #exit -1
+  #  echo -n "⏹️ "
+  #  ;;
+esac
+
+OUTPUT="$(playerctl metadata artist) - $(playerctl metadata title)"
+
+# do replacements for different radio stations using radio-metadata.py
+if [ "$OUTPUT" = " - 📻 BBC 6 Music 📻" ]; then
+    OUTPUT="BBC6: $(python3 ~/.local/bin/statusbar/radio-metadata.py https://www.bbc.co.uk/sounds/player/bbc_6music)"
+elif [ "$OUTPUT" = " - Triple J Unearthed" ]; then
+    OUTPUT="tJU: $(python3 ~/.local/bin/statusbar/radio-metadata.py https://music.abcradio.net.au/api/v1/plays/unearthed/now.json)"
+elif [ "$OUTPUT" = " - Triple J NSW" ]; then
+    OUTPUT="tJ: $(python3 ~/.local/bin/statusbar/radio-metadata.py https://music.abcradio.net.au/api/v1/plays/triplej/now.json)"
+elif [ "$OUTPUT" = " - 📻 KEXP 📻" ]; then
+    OUTPUT="KEXP: $(python3 ~/.local/bin/statusbar/radio-metadata.py 'https://api.kexp.org/v2/plays/?format=json&limit=1&ordering=-airdate')"
+elif [ "${OUTPUT:0:4}" = " - ▶" ]; then
+    OUTPUT="${OUTPUT:4}"
+elif [ "${OUTPUT:0:3}" = " - " ]; then
+    OUTPUT="${OUTPUT:3}"
+fi
+
+if [ "$#" -ne 0 ]; then
+    echo $OUTPUT
+else
+    echo ${OUTPUT::50}
+fi

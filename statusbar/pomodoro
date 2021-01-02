@@ -1,0 +1,18 @@
+#!/bin/bash
+
+POMODOROPATH=~/programming/i3status/plugins/pomodoro/
+
+if [ ! $(cat $POMODOROPATH/mode) = 0 ]
+then
+    if [ $(cat $POMODOROPATH/mode) = 1 ]
+    then
+        echo "📚 $(cat $POMODOROPATH/minutes):$(cat $POMODOROPATH/seconds)"
+        echo ""
+        echo "#ffff00"
+    elif [ $(cat $POMODOROPATH/mode) = 2 ]
+    then
+        echo "☕ $(cat $POMODOROPATH/minutes):$(cat $POMODOROPATH/seconds)"
+        echo ""
+        echo "#00ff00"
+    fi
+fi

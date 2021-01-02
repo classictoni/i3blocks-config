@@ -1,0 +1,8 @@
+#!/bin/bash
+
+OUTPUT=$(acpi | sed 's/Battery [0-2]: //' \
+| sed 's/Unknown, /❔/' | sed 's/Charging, /🔌/' | sed 's/Discharging, /🔋/' | sed 's/Full,/ 🔌/' \
+| sed 's/%,.*$/%/' \
+| tr "\n" " ")
+
+echo $OUTPUT

@@ -1,0 +1,5 @@
+#!/bin/bash
+OUT=$(amixer get Capture | sed '5q;d' | sed -e 's/ //g' | sed -e 's/.*\[\(.\+\)\]\[\([a-z]*\)\]/🎤\2 \1/' | sed 's/on //')
+if [ -n $(echo $OUT | grep off) ]; then
+    echo $OUT
+fi

@@ -1,0 +1,109 @@
+#!/bin/python3
+
+from time import sleep
+from bs4 import BeautifulSoup
+import datetime
+import urllib3 
+import sys
+import os
+import subprocess
+urllib3.disable_warnings()
+
+url = 'https://www.srf.ch/meteo/wetter/Z%C3%BCrich/47.3797,8.5342?geolocationNameId=4cdc93de6ddc36141f7493213eeedaee'
+#url = 'https://www.srf.ch/meteo/wetter/Goldingen/47.2629,8.9664'
+if len(sys.argv) > 1:
+    # this execution was called by mouse click with coordinates (x, y)
+    x = sys.argv[1]
+    y = sys.argv[2]
+    bashCommand = 'brave ' + url
+    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+
+def get_icon(s):
+    icon = ''
+    # alt = ziemlich sonnig
+    if 'ziemlich sonnig' == s:
+        icon = '🌤'
+    # alt = Sonne und Wolken im Wechsel
+    elif 'Sonne und Wolken im Wechsel' == s:
+        icon = '🌥'
+    # alt = sonnig
+    elif 'sonnig' == s:
+        icon = '🌞'
+        # other sun emojis: 🌞, 🔅, 🔆, ☀️(colored), ☼ (black)
+    # alt = wenige Gewitter
+    elif 'wenige Gewitter' == s:
+        icon = '🌩'
+    # alt = teils sonnig, teils Schauer
+    elif 'teils sonnig, teils Schauer' == s:
+        icon = '🌦'
+    # alt = regnerisch
+    elif 'regnerisch' == s:
+        icon = '🌧'
+    # alt = Dauerregen
+    elif 'Dauerregen' == s:
+        icon = '🌧 🌧'
+    # alt = bedeckt
+    elif 'bedeckt' == s:
+        icon = '☁️'
+    elif 'trockene Phasen und Schauer im Wechsel' == s:
+        icon = '☁️🌧️'
+    elif 'Sonne und Nebelbänke' == s:
+        icon = '🌞🌫️'
+    elif 'Regen, zeitweise auch mit Flocken' == s:
+        icon = '🌧❄️'
+    elif 'teils sonnig, einzelne Schneeschauer' == s:
+        icon = '🌞❄️'
+    elif 'sonnige Abschnitte und Schneeregenschauer' == s:
+        icon = '🌞🌧❄️'
+    elif 'ab und zu Schneeregen' == s:
+        icon = '🌧❄️'
+    elif 'trüb mit einigen Schneeschauern' == s:
+        icon = '☁️❄️'
+    elif 'stark bewölkt mit Schnee' == s:
+        icon = '☁️☁️❄️'
+    elif 'sonnige Abschnitte und einige Gewitter' == s:
+        icon = '🌞🌩'
+        # more snow: 🌨️
+    else:
+        # TODO: find out other names
+        icon = s
+    return icon
+
+def get_weather():
+    http = urllib3.PoolManager()
+
+    try:
+        meteo_html = http.request('GET', url)
+    except:
+        print("Weather: hit mod+shift+R to update")
+        sys.exit(1)
+    soup = BeautifulSoup(meteo_html.data, 'lxml')
+
+    day = 'Heute'
+    now = datetime.datetime.now()
+    today_14h = now.replace(hour=14, minute=0, second=0, microsecond=0)
+    show_tomorrow = now > today_14h
+    for tag in soup.find_all('button', {'class': 'weather-week__link'}):
+        if show_tomorrow:
+            show_tomorrow = False
+            day = 'Morgen'
+            continue
+        tag_weather = tag.find('img', {'class': 'weather-day__img'})
+        weather_string = tag_weather['alt']
+        tag_low = tag.find('span', {'class': 'weather-day__tmp--low'}).find('span', {'role': 'presentation'})
+        low_temp = tag_low.text
+        tag_high = tag.find('span', {'class': 'weather-day__tmp--hi'}).find('span', {'role': 'presentation'})
+        high_temp = tag_high.text
+        temperature = low_temp + ' / ' + high_temp + ' °C'
+        break
+
+    #for tag in soup.find_all('img'):
+    #    if 'SRF Meteo' in tag['title']:
+    #        weather_string = tag['alt']
+    #        weather_icon = get_icon(weather_string)
+    #        break
+
+    print('' + day + ' ' + get_icon(weather_string) + ' ' + temperature)
+
+get_weather()

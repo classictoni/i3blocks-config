@@ -1,0 +1,20 @@
+#!/bin/bash
+WIFI_INFO=$(nmcli | head -n 1)
+OUTPUT=$(echo $WIFI_INFO | sed "s/wlp3s0: connected to //")
+if [[ $OUTPUT == *"disconnected"* ]] || [[ $OUTPUT == *"unavailable"* ]] ; then
+    echo $OUTPUT
+    echo $OUTPUT
+    echo \#FF0000 # red
+elif [[ $WIFI_INFO == "wlp3s0: connected"* ]] ; then
+    PERCENTAGE=$(nmcli -t -f IN-USE,SIGNAL dev wifi list | grep \* | sed 's/\*://')
+    OUTPUT="$OUTPUT $PERCENTAGE%"
+    echo $OUTPUT
+    echo $OUTPUT
+    echo \#00FF00 # green
+else
+    echo $OUTPUT
+    echo $OUTPUT
+    echo \#FFFF00 # yellow
+fi
+# TODO: if not connected:
+#echo \#FF0000 # red

@@ -1,0 +1,17 @@
+#!/bin/bash
+CAPS=$(xset q | grep Caps | sed 's/^.*Caps Lock: *off.*$/off/' | sed 's/^.*Caps Lock: *on.*$/on/')
+if [ "$CAPS" = on ]; then
+    WARNINGS="$WARNINGS,CAPS"
+fi
+
+if [ ! -n "$(setxkbmap -query | grep layout | grep us)" ]; then
+    WARNINGS="$WARNINGS,NOT US"
+fi
+
+if [ -n "$WARNINGS" ]; then
+    WARNINGS=$(echo $WARNINGS | sed 's/,//')
+    WARNINGS=$(echo $WARNINGS | sed 's/,/ | /g')
+    echo $WARNINGS
+    echo $WARNINGS
+    echo \#FF0000 # red
+fi

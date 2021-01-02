@@ -1,0 +1,13 @@
+#EXTM3U
+
+#EXTINF:0,📻 KEXP 📻
+https://kexp-mp3-128.streamguys1.com/kexp128.mp3
+
+#EXTINF:0,📻 Triple J unearthed 📻
+http://live-radio02.mediahubaustralia.com/UNEW/mp3/
+
+#EXTINF:0,📻 Triple J NSW 📻
+https://live-radio01.mediahubaustralia.com/2TJW/mp3/
+
+#EXTINF:0,📻 BBC 6 Music 📻
+http://bbcmedia.ic.llnwd.net/stream/bbcmedia_6music_mf_p
