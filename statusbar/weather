@@ -3,7 +3,7 @@
 from time import sleep
 from bs4 import BeautifulSoup
 import datetime
-import urllib3 
+import urllib3
 import sys
 import os
 import subprocess
