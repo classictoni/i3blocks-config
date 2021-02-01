@@ -1,17 +1,35 @@
 #!/bin/bash
 
+stringify_seconds() {
+    let seconds=$1%60
+    let minutes=$1/60%60
+    let hours=$1/3600
+# the printf is very important, because i3blocks will just ignore numbers for some reasone ¯\_(ツ)_/¯
+# the printf is also a quite beautiful solution to printing the time 😎
+    echo $(printf '%02d:%02d:%02d' $hours $minutes $seconds) | sed 's/^00://'
+}
+
 TIMERPATH=~/.config/timer/
 
+if [ $(cat $TIMERPATH/addorsub) = 0 ]; then
+    let secs=$(cat $TIMERPATH/seconds)
+else
+    let secs=$(date +%s)-$(cat $TIMERPATH/start)
+fi
+
+# mode = 0: show no timer
+# mode = 1: work mode
+# mode = 2: pause mode
 if [ ! $(cat $TIMERPATH/mode) = 0 ]
 then
     if [ $(cat $TIMERPATH/mode) = 1 ]
     then
-        echo "📚 $(cat $TIMERPATH/minutes):$(cat $TIMERPATH/seconds)"
+        echo "📚 $(stringify_seconds $secs)"
         echo ""
         echo "#ffff00"
     elif [ $(cat $TIMERPATH/mode) = 2 ]
     then
-        echo "☕ $(cat $TIMERPATH/minutes):$(cat $TIMERPATH/seconds)"
+        echo "☕ $(stringify_seconds $secs)"
         echo ""
         echo "#00ff00"
     fi

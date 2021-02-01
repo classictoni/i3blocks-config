@@ -124,7 +124,7 @@ interval=10
 
 # weather (by toni)
 [weather]
-command=~/.local/bin/statusbar/weather $x $y
+command=~/.local/bin/statusbar/weather https://www.srf.ch/meteo/wetter/Z%C3%BCrich/47.3797,8.5342 $x $y
 interval=3600
 
 #[load_average]
