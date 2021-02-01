@@ -1,0 +1,18 @@
+#!/bin/bash
+
+TIMERPATH=~/.config/timer/
+
+if [ ! $(cat $TIMERPATH/mode) = 0 ]
+then
+    if [ $(cat $TIMERPATH/mode) = 1 ]
+    then
+        echo "📚 $(cat $TIMERPATH/minutes):$(cat $TIMERPATH/seconds)"
+        echo ""
+        echo "#ffff00"
+    elif [ $(cat $TIMERPATH/mode) = 2 ]
+    then
+        echo "☕ $(cat $TIMERPATH/minutes):$(cat $TIMERPATH/seconds)"
+        echo ""
+        echo "#00ff00"
+    fi
+fi
