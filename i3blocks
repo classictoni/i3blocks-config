@@ -38,8 +38,9 @@ color=#ffff00
 interval=100
 signal=16
 
-# Pomodoro timer (by toni)
-[pomodoro]
+# timer (by toni)
+[timer]
+#signal=17
 interval=1
 
 [microphone]
